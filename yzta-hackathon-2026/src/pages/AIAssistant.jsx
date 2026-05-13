@@ -1,7 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Send, Bot, User, Sparkles, MessageSquare, Clock } from 'lucide-react';
 
 const AIAssistant = () => {
+  const [messages, setMessages] = useState([
+    { role: 'user', content: 'Bu ay hangi ürünleri daha fazla stoklamalıyım?' },
+    { role: 'bot', content: 'Harika bir soru! Verileri ve güncel trendleri senin için analiz ettim. Önümüzdeki ay için meşrubat ve temizlik grubu ürünlerini artırmanı öneririm.' }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+
+    const newUserMessage = { role: 'user', content: inputValue };
+    setMessages([...messages, newUserMessage]);
+    setInputValue('');
+
+    // Simulate bot response
+    setTimeout(() => {
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        content: 'Analiz tamamlandı. Verilerinize göre talebinizle ilgili optimizasyon önerilerimi hazırladım.' 
+      }]);
+    }, 1000);
+  };
+
   const history = [
     { title: 'Mart Ayı Stok Tahmini', time: '2 saat önce' },
     { title: 'Bayram Kampanyası Analizi', time: 'Dün' },
@@ -25,9 +48,9 @@ const AIAssistant = () => {
               <h3>Sık Sorulan Sorular</h3>
             </div>
             <div className="question-chips">
-              <button className="chip">Bu ay ne stoklamalıyım?</button>
-              <button className="chip">En kârlı ürün hangisi?</button>
-              <button className="chip">Hava durumu satışı nasıl etkiler?</button>
+              <button className="chip" onClick={() => setInputValue('Bu ay ne stoklamalıyım?')}>Bu ay ne stoklamalıyım?</button>
+              <button className="chip" onClick={() => setInputValue('En kârlı ürün hangisi?')}>En kârlı ürün hangisi?</button>
+              <button className="chip" onClick={() => setInputValue('Hava durumu satışı nasıl etkiler?')}>Hava durumu satışı nasıl etkiler?</button>
             </div>
           </div>
 
@@ -49,39 +72,28 @@ const AIAssistant = () => {
 
         <main className="chat-container glass">
           <div className="chat-messages">
-            <div className="message user">
-              <div className="avatar"><User size={20} /></div>
-              <div className="bubble">Bu ay hangi ürünleri daha fazla stoklamalıyım?</div>
-            </div>
-
-            <div className="message bot">
-              <div className="avatar"><Bot size={20} /></div>
-              <div className="bubble">
-                <p>Harika bir soru! Verileri ve güncel trendleri senin için analiz ettim. Önümüzdeki ay için şu stratejiyi izlemeni öneririm:</p>
-                
-                <div className="analysis-card">
-                  <h5>Meşrubat Grubu</h5>
-                  <p>Hava sıcaklıklarının mevsim normallerinin üzerinde seyretmesi beklendiği için su ve asitli içecek talebinde %30 artış öngörüyorum.</p>
+            {messages.map((msg, idx) => (
+              <div key={idx} className={`message ${msg.role}`}>
+                <div className="avatar">
+                  {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
                 </div>
-
-                <div className="analysis-card">
-                  <h5>Temizlik Malzemeleri</h5>
-                  <p>Geçen yılın aynı dönemine göre genel temizlik ürünleri satışların %15 daha hızlı devrediyor. Stok seviyeni %20 artırman riski azaltacaktır.</p>
-                </div>
-
-                <div className="hint">
-                  <Sparkles size={16} />
-                  <span><strong>İpucu:</strong> Tedarikçiniz 'Global Dağıtım' bu hafta için ek %5 iskonto tanımladı.</span>
+                <div className="bubble">
+                  <p>{msg.content}</p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
           <div className="chat-input-area">
-            <div className="input-wrapper">
-              <input type="text" placeholder="Dijital Çırak'a bir soru sor..." />
-              <button className="send-btn"><Send size={20} /></button>
-            </div>
+            <form onSubmit={handleSendMessage} className="input-wrapper">
+              <input 
+                type="text" 
+                placeholder="Dijital Çırak'a bir soru sor..." 
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+              <button type="submit" className="send-btn"><Send size={20} /></button>
+            </form>
           </div>
         </main>
       </div>

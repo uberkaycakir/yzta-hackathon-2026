@@ -1,5 +1,6 @@
-import React from 'react';
-import { TrendingUp, Package, AlertTriangle, ShoppingCart, Sparkles, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { TrendingUp, Package, AlertTriangle, ShoppingCart, Sparkles, ArrowUpRight, ArrowDownRight, RefreshCw } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const StatCard = ({ title, value, trend, icon: Icon, color }) => (
   <div className="stat-card glass">
@@ -21,28 +22,41 @@ const StatCard = ({ title, value, trend, icon: Icon, color }) => (
   </div>
 );
 
-const RecommendationItem = ({ text }) => (
+const RecommendationItem = ({ text, onApply }) => (
   <div className="recommendation-item">
     <div className="recommendation-icon">
       <Sparkles size={16} />
     </div>
     <p>{text}</p>
-    <button className="apply-btn">Uygula</button>
+    <button className="apply-btn" onClick={onApply}>Uygula</button>
   </div>
 );
 
-const Dashboard = () => {
+const Dashboard = ({ setActiveTab }) => {
+  const { products, refreshData, sales } = useData();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    refreshData();
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
+
+  const totalProducts = products.length;
+  const criticalStock = products.filter(p => p.status === 'critical').length;
+  const dailySalesTotal = sales.reduce((acc, s) => acc + s.total, 0);
+
   const stats = [
-    { title: 'Günlük Satış', value: '₺4.250', trend: { type: 'up', value: '%12' }, icon: TrendingUp, color: 'blue' },
-    { title: 'Kritik Stok', value: '3 Ürün', trend: { type: 'down', value: '5 Ürün' }, icon: AlertTriangle, color: 'orange' },
-    { title: 'Toplam Ürün', value: '1.240', trend: { type: 'up', value: '+12' }, icon: Package, color: 'green' },
+    { title: 'Günlük Satış', value: `₺${dailySalesTotal.toLocaleString()}`, trend: { type: 'up', value: '%12' }, icon: TrendingUp, color: 'blue' },
+    { title: 'Kritik Stok', value: `${criticalStock} Ürün`, trend: { type: 'down', value: '5 Ürün' }, icon: AlertTriangle, color: 'orange' },
+    { title: 'Toplam Ürün Türü', value: totalProducts, trend: { type: 'up', value: '+1' }, icon: Package, color: 'green' },
     { title: 'Yeni Sipariş', value: '5 Yeni', trend: { type: 'up', value: '+2' }, icon: ShoppingCart, color: 'purple' },
   ];
 
   const recommendations = [
-    { text: 'Süt stokları hızla tükeniyor, bugün sipariş vermeniz önerilir.' },
-    { text: 'Ekmek satışları öğleden sonra artıyor, rafı ön plana çekin.' },
-    { text: 'Bekleyen yoğurtlar için "1 alana 1 bedava" kampanyası başlatın.' },
+    { text: 'Süt stokları hızla tükeniyor, bugün sipariş vermeniz önerilir.', target: 'planning' },
+    { text: 'Ekmek satışları öğleden sonra artıyor, rafı ön plana çekin.', target: 'shelf' },
+    { text: 'Bekleyen yoğurtlar için "1 alana 1 bedava" kampanyası başlatın.', target: 'campaigns' },
   ];
 
   return (
@@ -53,7 +67,14 @@ const Dashboard = () => {
           <p>Mağazanızın bugünkü performans özeti ve akıllı önerileri.</p>
         </div>
         <div className="header-actions">
-          <button className="primary-btn">Verileri Güncelle</button>
+          <button 
+            className={`secondary-btn ${isRefreshing ? 'loading' : ''}`} 
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+          >
+            <RefreshCw size={18} className={isRefreshing ? 'spin' : ''} /> 
+            {isRefreshing ? 'Güncelleniyor...' : 'Verileri Güncelle'}
+          </button>
         </div>
       </header>
 
@@ -71,7 +92,11 @@ const Dashboard = () => {
           </div>
           <div className="recommendations-list">
             {recommendations.map((rec, index) => (
-              <RecommendationItem key={index} text={rec.text} />
+              <RecommendationItem 
+                key={index} 
+                text={rec.text} 
+                onApply={() => setActiveTab(rec.target)} 
+              />
             ))}
           </div>
         </section>
@@ -132,10 +157,10 @@ const Dashboard = () => {
           justify-content: center;
         }
 
-        .icon-container.blue { background: #eef2ff; color: #1a56db; }
-        .icon-container.orange { background: #fff7ed; color: #f97316; }
-        .icon-container.green { background: #f0fdf4; color: #10b981; }
-        .icon-container.purple { background: #faf5ff; color: #7c3aed; }
+        .icon-container.blue { background: var(--bg-blue); color: var(--primary-color); }
+        .icon-container.orange { background: var(--bg-orange); color: #f97316; }
+        .icon-container.green { background: var(--bg-green); color: var(--secondary-color); }
+        .icon-container.purple { background: var(--bg-purple); color: #7c3aed; }
 
         .trend {
           display: flex;
@@ -147,8 +172,8 @@ const Dashboard = () => {
           border-radius: var(--radius-sm);
         }
 
-        .trend.up { color: #10b981; background: #f0fdf4; }
-        .trend.down { color: #ef4444; background: #fef2f2; }
+        .trend.up { color: var(--status-success-text); background: var(--status-success-bg); }
+        .trend.down { color: var(--status-error-text); background: var(--status-error-bg); }
 
         .stat-card-body h3 {
           font-size: 0.875rem;
