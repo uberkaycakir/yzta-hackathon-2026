@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "tr",
+    "domain": "esnaf-market-yönetimi",
+    "description": "Mahalle bakkalı, market ve küçük esnaf işletmeleri için AI asistan eğitim verisi",
+    "lastUpdated": "2026-05-13"
+  },
+  "storeContext": {
+    "storeType": "Mahalle Marketi",
+    "location": "İstanbul, Kadıköy",
+    "monthlyRevenue": 85000,
+    "employeeCount": 2,
+    "topCategories": ["İçecek", "Temizlik", "Temel Gıda", "Süt Ürünleri", "Atıştırmalık"]
+  },
+  "inventory": [
+    { "id": "P001", "name": "Coca-Cola 1L", "category": "İçecek", "stock": 48, "minStock": 20, "price": 32, "cost": 22, "monthlySales": 120, "supplier": "Coca-Cola Türkiye" },
+    { "id": "P002", "name": "Ülker Çikolata 80g", "category": "Atıştırmalık", "stock": 35, "minStock": 15, "price": 25, "cost": 17, "monthlySales": 85, "supplier": "Ülker" },
+    { "id": "P003", "name": "Pınar Süt 1L", "category": "Süt Ürünleri", "stock": 30, "minStock": 25, "price": 28, "cost": 20, "monthlySales": 200, "supplier": "Pınar" },
+    { "id": "P004", "name": "Domestos 750ml", "category": "Temizlik", "stock": 12, "minStock": 20, "price": 45, "cost": 31, "monthlySales": 40, "supplier": "Unilever" },
+    { "id": "P005", "name": "Eti Browni", "category": "Atıştırmalık", "stock": 60, "minStock": 20, "price": 18, "cost": 12, "monthlySales": 150, "supplier": "Eti" },
+    { "id": "P006", "name": "Fanta Portakal 1L", "category": "İçecek", "stock": 24, "minStock": 15, "price": 30, "cost": 21, "monthlySales": 90, "supplier": "Coca-Cola Türkiye" },
+    { "id": "P007", "name": "Omo Toz Deterjan 3kg", "category": "Temizlik", "stock": 8, "minStock": 15, "price": 175, "cost": 125, "monthlySales": 25, "supplier": "Unilever" },
+    { "id": "P008", "name": "Sek Ayran 300ml", "category": "Süt Ürünleri", "stock": 55, "minStock": 30, "price": 14, "cost": 9, "monthlySales": 300, "supplier": "Sek" },
+    { "id": "P009", "name": "Torku Şeker 1kg", "category": "Temel Gıda", "stock": 22, "minStock": 15, "price": 38, "cost": 27, "monthlySales": 60, "supplier": "Torku" },
+    { "id": "P010", "name": "Balparmak Bal 250g", "category": "Temel Gıda", "stock": 10, "minStock": 12, "price": 95, "cost": 68, "monthlySales": 18, "supplier": "Balparmak" }
+  ],
+  "salesHistory": [
+    { "month": "Ocak 2026", "revenue": 72000, "topProducts": ["Pınar Süt 1L", "Sek Ayran 300ml", "Coca-Cola 1L"], "notes": "Kış ayı, sıcak içecek talebi arttı" },
+    { "month": "Şubat 2026", "revenue": 68000, "topProducts": ["Ülker Çikolata 80g", "Eti Browni", "Pınar Süt 1L"], "notes": "Sevgililer Günü çikolata satışları patladı" },
+    { "month": "Mart 2026", "revenue": 78000, "topProducts": ["Coca-Cola 1L", "Fanta Portakal 1L", "Domestos 750ml"], "notes": "Mart ayı temizlik sezonu başladı" },
+    { "month": "Nisan 2026", "revenue": 91000, "topProducts": ["Sek Ayran 300ml", "Coca-Cola 1L", "Eti Browni"], "notes": "Hava ısınmaya başladı, soğuk içecek satışları arttı" },
+    { "month": "Mayıs 2026", "revenue": 85000, "topProducts": ["Sek Ayran 300ml", "Fanta Portakal 1L", "Domestos 750ml"], "notes": "Normal ay, stok dengeli" }
+  ],
+  "faqExamples": [
+    {
+      "soru": "Bu ay hangi ürünleri daha fazla stoklamalıyım?",
+      "cevap": "Mayıs ayında hava ısındığı için Sek Ayran ve soğuk içecekler (Coca-Cola, Fanta) satış rekorları kırıyor. Geçen ay verilerine göre Domestos ve temizlik ürünleri de talep görüyor. Önerim: Ayran stoğunu %30 artır, Omo deterjanını acil sipariş ver (kritik stok altında)."
+    },
+    {
+      "soru": "En kârlı ürün hangisi?",
+      "cevap": "Kâr marjı açısından sıralama: 1) Sek Ayran (%56 marj) - 2) Eti Browni (%50 marj) - 3) Ülker Çikolata (%47 marj). Hacim × marj çarpımında Sek Ayran açık ara birinci, günde ortalama 10 adet satıyorsunuz."
+    },
+    {
+      "soru": "Hava durumu satışları nasıl etkiler?",
+      "cevap": "Sıcak havalarda (25°C+): Soğuk içecekler %40, dondurma %60 artar. Yağmurlu günlerde: İç mekan snack ürünleri (çikolata, cips) %25 artar. Sonbahar/kış: Çorba, sıcak içecek, bal satışları patlar. Şu an Mayıs ortası, hafta sonu hava güneşli görünüyor - Pazar günü için fazladan ayran ve gazlı içecek hazırlayın."
+    },
+    {
+      "soru": "Stokta kritik ürün var mı?",
+      "cevap": "Evet, 2 ürün kritik seviyenin altında: 1) Omo Toz Deterjan 3kg - Stok: 8, Min. stok: 15. Acil sipariş gerekli! 2) Balparmak Bal 250g - Stok: 10, Min. stok: 12. Bu hafta sipariş ver. Domestos da sınırda (12/20), takip et."
+    },
+    {
+      "soru": "Rakamlarla bu ay nasıl gidiyoruz?",
+      "cevap": "Mayıs ayı performansı: Ciro 85.000₺ (Nisan'a göre %7 düşüş). İyi haber: Kâr marjı Nisan'dan yüksek çünkü yüksek marjlı ürünler daha çok satıldı. Net kâr tahmini: ~18.500₺. Stok devir hızı: 4.2x (sektör ortalaması 3.8x - bu iyi!)."
+    },
+    {
+      "soru": "Ramazan/bayram için ne hazırlamalıyım?",
+      "cevap": "Ramazan öncesi 3 hafta hazırlık başlamalısınız. Artan ürünler: Şeker (+%80), Bal (+%120), Çikolata-Şeker kutuları (+%200), Hazır çorba (+%60). Azalan ürünler: Gazlı içecek (gündüz), sigara. Tedarikçilerinizi 1 ay önceden bilgilendirip stok kilidine alın."
+    },
+    {
+      "soru": "Hangi ürünü raftan kaldırmalıyım?",
+      "cevap": "Satış verilerinize göre yavaş hareket eden ürünler: Balparmak Bal - ayda sadece 18 adet, ancak yüksek marjlı. Raft alanı sıkıntısı varsa küçük pakete geçin (125g). Genel kural: Aylık satışı 10 adetten az + marjı %30'dan düşük olan ürünler raftan kaldırılabilir."
+    },
+    {
+      "soru": "Yeni ürün eklemeli miyim?",
+      "cevap": "Mahalle marketinizde eksik görünen kategoriler: 1) Protein bar / sağlıklı atıştırmalık (trend artıyor) 2) Doğal meyve suyu (Cappy, Tropicana - yüksek marj) 3) Bebek maması (sadakati yüksek müşteri segmenti). Bu 3 kategori Kadıköy profilindeki müşterilere uygun. Deneme için küçük lot alın."
+    },
+    {
+      "soru": "Tedarikçilerle fiyat nasıl müzakere ederim?",
+      "cevap": "Etkili müzakere taktikleri: 1) Toplu alım teklifi yapın - Coca-Cola grubunda aylık 300 şişe garantisi verirseniz %8-12 indirim alabilirsiniz. 2) Rakip fiyat gösterin - Market Zinciri A'nın size verdiği fiyatı paylaşın. 3) Yıllık sözleşme önerin - tedarikçiler sabit müşteriyi sever. Unilever ürünleri için bölge satış temsilcisini isteyin, indirim yetkisi var."
+    },
+    {
+      "soru": "Çalışma saatlerimi optimize etmeli miyim?",
+      "cevap": "Satış verilerinize göre yoğun saatler: 07:00-09:00 (kahvaltı alışverişi), 12:00-14:00 (öğle arası) ve 17:00-20:00 (akşam alışverişi). Düşük trafik: 10:00-12:00 ve 14:00-17:00. Öneri: 10:00-12:00 arasında raf düzenleme ve stok sayımı yapın. Cumartesi 10:00-13:00 en yoğun saatiniz - o saatte tek başınıza kalmayın."
+    }
+  ],
+  "seasonalTrends": {
+    "Ocak-Şubat": ["Sıcak içecek", "Çorba", "Çikolata", "Bal"],
+    "Mart-Mayıs": ["Bahar temizliği ürünleri", "Soğuk içecek başlangıcı", "Alerjik ilaç"],
+    "Haziran-Ağustos": ["Gazlı içecek", "Ayran", "Dondurma", "Su", "Güneş kremi"],
+    "Eylül-Kasım": ["Kışlık temizlik", "Sıcak içecek geçişi", "Okul kırtasiyesi"],
+    "Aralık": ["Yılbaşı çikolataları", "Şampanya/Alkollü içecek", "Kuruyemiş"]
+  }
+}
