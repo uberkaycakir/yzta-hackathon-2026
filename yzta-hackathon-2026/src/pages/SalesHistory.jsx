@@ -1,13 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { History, Search, Download, Calendar } from 'lucide-react';
+import { useData } from '../context/DataContext';
+
+import Modal from '../components/Modal';
 
 const SalesHistory = () => {
-  const transactions = [
-    { id: 'TRX001', date: '13 May 2026, 14:20', items: 'Ekmek, Süt, Yumurta', total: '₺165.00', status: 'completed' },
-    { id: 'TRX002', date: '13 May 2026, 13:45', items: 'Yoğurt, Peynir', total: '₺120.50', status: 'completed' },
-    { id: 'TRX003', date: '13 May 2026, 12:30', items: 'Su (5L), Meyve Suyu', total: '₺45.00', status: 'completed' },
-    { id: 'TRX004', date: '12 May 2026, 18:15', items: 'Temizlik Malzemeleri', total: '₺340.00', status: 'completed' },
-  ];
+  const { sales } = useData();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+
+  const parseDate = (dateStr) => {
+    const [d, m, y] = dateStr.split('.').map(Number);
+    return new Date(y, m - 1, d);
+  };
+
+  const handleExport = () => {
+    const headers = ['Islem No', 'Tarih', 'Urunler', 'Toplam (TL)', 'Durum'];
+    const rows = filteredSales.map(s => [
+      `TRX${s.id.toString().padStart(3, '0')}`,
+      s.date,
+      s.product,
+      s.total.toFixed(2),
+      'Tamamlandi'
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `satis_gecmisi_${new Date().toISOString().split('T')[0]}.csv`);
+    link.click();
+  };
+
+  const filteredSales = sales.filter(s => {
+    const matchesSearch = s.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          s.id.toString().includes(searchTerm);
+    
+    if (!startDate && !endDate) return matchesSearch;
+
+    const saleDate = parseDate(s.date);
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
+
+    if (start) start.setHours(0, 0, 0, 0);
+    if (end) end.setHours(23, 59, 59, 999);
+
+    const matchesDate = (!start || saleDate >= start) && (!end || saleDate <= end);
+    return matchesSearch && matchesDate;
+  });
 
   return (
     <div className="page-container sales-history">
@@ -17,16 +60,60 @@ const SalesHistory = () => {
           <p>Mağazanızın geçmiş tüm işlemlerini ve satış detaylarını inceleyin.</p>
         </div>
         <div className="header-actions">
-          <button className="secondary-btn"><Calendar size={18} /> Tarih Aralığı</button>
-          <button className="secondary-btn"><Download size={18} /> Dışa Aktar</button>
+          <button className="secondary-btn" onClick={() => setIsDateModalOpen(true)}>
+            <Calendar size={18} /> {startDate || endDate ? 'Filtreyi Düzenle' : 'Tarih Aralığı'}
+          </button>
+          {(startDate || endDate) && (
+            <button className="secondary-btn" onClick={() => { setStartDate(''); setEndDate(''); }} style={{ color: '#ef4444' }}>
+              Temizle
+            </button>
+          )}
+          <button className="secondary-btn" onClick={handleExport}>
+            <Download size={18} /> Dışa Aktar
+          </button>
         </div>
       </header>
+
+      <Modal
+        isOpen={isDateModalOpen}
+        onClose={() => setIsDateModalOpen(false)}
+        title="Tarih Aralığı Seçin"
+      >
+        <div className="modal-form">
+          <div className="form-row">
+            <div className="form-group">
+              <label>Başlangıç Tarihi</label>
+              <input 
+                type="date" 
+                value={startDate} 
+                onChange={(e) => setStartDate(e.target.value)} 
+              />
+            </div>
+            <div className="form-group">
+              <label>Bitiş Tarihi</label>
+              <input 
+                type="date" 
+                value={endDate} 
+                onChange={(e) => setEndDate(e.target.value)} 
+              />
+            </div>
+          </div>
+          <button className="primary-btn full-width" onClick={() => setIsDateModalOpen(false)}>
+            Uygula
+          </button>
+        </div>
+      </Modal>
 
       <div className="transactions-card glass">
         <div className="table-header">
           <div className="search-box">
             <Search size={18} />
-            <input type="text" placeholder="İşlem veya ürün ara..." />
+            <input 
+              type="text" 
+              placeholder="İşlem veya ürün ara..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
         <table className="data-table">
@@ -40,12 +127,12 @@ const SalesHistory = () => {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((t) => (
+            {filteredSales.map((t) => (
               <tr key={t.id}>
-                <td><strong>{t.id}</strong></td>
+                <td><strong>TRX{t.id.toString().padStart(3, '0')}</strong></td>
                 <td>{t.date}</td>
-                <td>{t.items}</td>
-                <td>{t.total}</td>
+                <td>{t.product}</td>
+                <td>₺{t.total.toFixed(2)}</td>
                 <td><span className="status-dot completed">Tamamlandı</span></td>
               </tr>
             ))}

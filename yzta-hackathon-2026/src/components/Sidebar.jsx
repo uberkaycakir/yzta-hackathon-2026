@@ -9,16 +9,20 @@ import {
   Megaphone, 
   Bot, 
   Settings, 
-  HelpCircle 
+  HelpCircle,
+  ChevronLeft,
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed, onLogout }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Ana Panel', icon: LayoutDashboard },
     { id: 'inventory', label: 'Ürün & Stok', icon: Package },
     { id: 'history', label: 'Satış Geçmişi', icon: History },
     { id: 'analytics', label: 'Kâr Analizi', icon: BarChart3 },
     { id: 'planning', label: 'Sipariş Planlama', icon: CalendarDays },
+    { id: 'calendar', label: 'Akıllı Takvim', icon: CalendarDays },
     { id: 'shelf', label: 'Raf Yerleşimi', icon: Grid3X3 },
     { id: 'campaigns', label: 'Kampanyalar', icon: Megaphone },
     { id: 'ai-assistant', label: 'Dijital Çırak', icon: Bot },
@@ -30,13 +34,23 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      <button 
+        className="collapse-btn" 
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        title={isCollapsed ? "Genişlet" : "Daralt"}
+      >
+        {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+      </button>
+
       <div className="sidebar-logo">
-        <div className="logo-icon">AI</div>
-        <div className="logo-text">
-          <h1>Dijital Çırak</h1>
-          <span>Yapay Zeka Destekli</span>
-        </div>
+        <div className="logo-icon">TM</div>
+        {!isCollapsed && (
+          <div className="logo-text">
+            <h1>TradeMate AI</h1>
+            <span>Mağaza Zekası</span>
+          </div>
+        )}
       </div>
 
       <nav className="sidebar-nav">
@@ -46,9 +60,10 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
               <button
                 className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
                 onClick={() => setActiveTab(item.id)}
+                title={isCollapsed ? item.label : ''}
               >
                 <item.icon size={20} />
-                <span>{item.label}</span>
+                {!isCollapsed && <span>{item.label}</span>}
               </button>
             </li>
           ))}
@@ -62,16 +77,29 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
               <button
                 className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
                 onClick={() => setActiveTab(item.id)}
+                title={isCollapsed ? item.label : ''}
               >
                 <item.icon size={20} />
-                <span>{item.label}</span>
+                {!isCollapsed && <span>{item.label}</span>}
               </button>
             </li>
           ))}
+          <li>
+            <button
+              className="nav-item logout-btn"
+              onClick={onLogout}
+              title={isCollapsed ? "Çıkış Yap" : ""}
+            >
+              <LogOut size={20} />
+              {!isCollapsed && <span>Çıkış Yap</span>}
+            </button>
+          </li>
         </ul>
       </nav>
 
       <style jsx>{`
+        .logout-btn { color: #ef4444 !important; margin-top: auto; }
+        .logout-btn:hover { background: #fef2f2 !important; }
         .sidebar {
           width: 280px;
           height: 100vh;
@@ -82,6 +110,31 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           padding: 1.5rem;
           position: sticky;
           top: 0;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 100;
+        }
+
+        .sidebar.collapsed {
+          width: 80px;
+          padding: 1.5rem 0.75rem;
+        }
+
+        .collapse-btn {
+          position: absolute;
+          top: 21rem;
+          right: -12px;
+          width: 24px;
+          height: 50px;
+          background: var(--primary-color);
+          color: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border: none;
+          box-shadow: var(--shadow-sm);
+          z-index: 10;
         }
 
         .sidebar-logo {
@@ -90,9 +143,11 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           gap: 1rem;
           margin-bottom: 2.5rem;
           padding: 0.5rem;
+          overflow: hidden;
         }
 
         .logo-icon {
+          min-width: 40px;
           width: 40px;
           height: 40px;
           background: var(--primary-color);
@@ -108,12 +163,14 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         .logo-text h1 {
           font-size: 1.1rem;
           line-height: 1.2;
+          white-space: nowrap;
         }
 
         .logo-text span {
           font-size: 0.75rem;
           color: var(--text-secondary);
           font-weight: 500;
+          white-space: nowrap;
         }
 
         .sidebar-nav {
@@ -121,6 +178,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
+          overflow: hidden;
         }
 
         .nav-item {
@@ -133,6 +191,12 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           color: var(--text-secondary);
           transition: all 0.2s ease;
           font-weight: 500;
+          white-space: nowrap;
+        }
+
+        .sidebar.collapsed .nav-item {
+          justify-content: center;
+          padding: 0.875rem;
         }
 
         .nav-item:hover {
@@ -150,23 +214,6 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           height: 1px;
           background: var(--border-color);
           margin: 1rem 0;
-        }
-
-        @media (max-width: 768px) {
-          .sidebar {
-            width: 80px;
-            padding: 1rem 0.5rem;
-          }
-          .logo-text, .nav-item span {
-            display: none;
-          }
-          .sidebar-logo {
-            justify-content: center;
-          }
-          .nav-item {
-            justify-content: center;
-            padding: 0.875rem;
-          }
         }
       `}</style>
     </aside>
