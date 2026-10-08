@@ -2,7 +2,8 @@
 
 **Küçük Esnafı Yapay Zeka ile Geleceğe Taşıyan Akıllı Mağaza Yönetim Ekosistemi**
 
----
+Videolu Anlatım İçin: https://drive.google.com/file/d/1WqRYpu4FVH74JLKH3I7PEGZhW_hqghdD/view?pli=1
+
 
 ## 🌟 Proje Vizyonu
 Geleneksel mahalle esnafı ve küçük işletmeler, büyük zincir marketlerin veri analitiği güçleriyle rekabet etmekte zorlanıyor. **AI Shop Intelligence Hub**, bu eşitsizliği ortadan kaldırmak için geliştirildi. "Dijital Çırak" modülü sayesinde esnaf, karmaşık tablolarla uğraşmak yerine kendi verileriyle konuşan bir yapay zekaaya sahip oluyor.
@@ -14,7 +15,7 @@ Proje, bir esnafın günlük operasyonlarını (stok, satış, kâr) tek bir mer
 - **Proaktif Karar Alma:** "Yarın ne satmalıyım?" sorusuna geçmiş veriler ve trendlerle cevap verir.
 - **Kritik Stok Yönetimi:** Ürün bitmeden çok önce uyarı yaparak tedarik zincirini optimize eder.
 
----
+
 
 ## 🛠️ Teknik Ekosistem
 Proje, modern ve ölçeklenebilir bir teknoloji yığını üzerine inşa edilmiştir:
@@ -33,7 +34,7 @@ Projenin kalbi olan "Dijital Çırak", **Google Gemini 1.5 Flash** modelini kull
 ### 3. Veri Yapısı
 - **Eğitim Verisi (`shopkeeper-training-data.json`):** Esnafın mağaza profili, 5 aylık ciro trendleri, kâr marjları ve mevsimsel dondurma/sıcak içecek satış eğilimleri gibi zengin bir dataset içerir.
 
----
+
 
 ## 🚀 Öne Çıkan Özellikler
 
@@ -45,7 +46,7 @@ Projenin kalbi olan "Dijital Çırak", **Google Gemini 1.5 Flash** modelini kull
 | **Kampanya Planlayıcı** | Bayram, Ramazan veya özel günler için AI destekli stok planlama. |
 | **Raf Yerleşim Optimizasyonu** | Satış hızına göre ürünlerin mağaza içi konumlandırma önerileri. |
 
----
+
 
 ## 🔧 Kurulum ve Çalıştırma
 
@@ -65,7 +66,7 @@ Projenin kalbi olan "Dijital Çırak", **Google Gemini 1.5 Flash** modelini kull
    npm run dev
    ```
 
----
+
 
 ## 📈 Gelecek Yol Haritası
 - [ ] **Görüntü İşleme:** Rafların fotoğrafını çekerek eksik ürünleri otomatik tespit etme.
